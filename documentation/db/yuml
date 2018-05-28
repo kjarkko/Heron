@@ -1,0 +1,7 @@
+[User|(pk) id:int;username:string;password:string]
+[Chat|(pk) id:int;name:string]
+[ChatUser|(pk) id:int;(fk) user_id:int;(fk) chat_id:int;admin:bool]
+[Message|(pk) id:int;(fk) chatuser_id:int;date:datetime;contents:string]
+[User]1-*[ChatUser]
+[chatuser]*-1[chat]
+[chatuser]1-*[message]

@@ -10,3 +10,5 @@ The goal is to create an instant messaging service similar to telegram/whatsapp/
 - Edit/search/delete messages
 
 [Heroku](https://tsoha-heron.herokuapp.com/)
+[Use cases](/documentation/use_cases.md)
+[DB diagram](/documentation/db/db_diagram.png)

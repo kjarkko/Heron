@@ -1,0 +1,32 @@
+<div class="topnav">
+  <style type="text/css">
+    .topnav {
+      background-color: #282828;
+    }
+    .topnav ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    .topnav li {
+      float: left;
+    }
+    .topnav li a {
+      display: block;
+      color: #f5f5f5;
+      padding: 14px 16px;
+      text-align: center;
+      text-decoration: none;
+    }
+    .topnav li a:hover {
+      background-color: #111;
+    }
+  </style>
+	
+  <ul>
+    <li><a href="{{ url_for('index') }}"><b>Home</b></a></li>
+    <li><a href="{{ url_for('users_form') }}">Create user</a></li>
+    <li><a href="{{ url_for('users_all') }}">List users</a></li>
+  </ul>
+</div>
