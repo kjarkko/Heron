@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block body %}
+  <form method="POST" action="{{ url_for('chats_post', chat_id=chat.id) }}">
+    <table>
+
+      <tr>
+        <td>{{ form.text.label }}</td>
+        <td>{{ form.text }}</td>
+      </tr>
+
+      <tr>
+        <td colspan="2">
+          <input type="submit" value="Send message"/>
+        </td>
+      </tr>
+
+    </table>
+  </form>
+
+  <table>
+    <tr>
+      <th>UID</th>
+      <th>Timestamp</th>
+      <th>Message</th>
+    </tr>
+    {% for message in messages %}
+      <tr>
+        <td>{{ message.id }}</td>
+        <td>{{ message.date }}</td>
+        <td>{{ message.text }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

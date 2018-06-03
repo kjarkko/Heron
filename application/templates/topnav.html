@@ -12,6 +12,9 @@
     .topnav li {
       float: left;
     }
+    .topnav li.right{
+      float: right;
+    }
     .topnav li a {
       display: block;
       color: #f5f5f5;
@@ -26,7 +29,14 @@
 	
   <ul>
     <li><a href="{{ url_for('index') }}"><b>Home</b></a></li>
-    <li><a href="{{ url_for('users_form') }}">Create user</a></li>
+    <li><a href="{{ url_for('users_new') }}">Create user</a></li>
     <li><a href="{{ url_for('users_all') }}">List users</a></li>
+    <li class="right">
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('users_logout') }}">Log out</a>
+      {% else %}
+        <a href="{{ url_for('users_login') }}">Log in</a>
+      {% endif %}
+    </li>
   </ul>
 </div>
