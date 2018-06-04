@@ -13,6 +13,6 @@ class Message(db.Model):
 		self.chat_user_id = chat_user_id
 		self.text = text
 
-	def find_all_in_chat(chat_id):
+	def find_all_in_chat(chat_id):  # TODO ignores id and fetches all messages
 		return Message.query.join(ChatUser, ChatUser.chat_id == chat_id)\
 			.all()

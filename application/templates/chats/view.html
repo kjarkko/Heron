@@ -23,12 +23,24 @@
       <th>UID</th>
       <th>Timestamp</th>
       <th>Message</th>
+      <th>Edit</th>
+      <th>Delete</th>
     </tr>
     {% for message in messages %}
       <tr>
         <td>{{ message.id }}</td>
         <td>{{ message.date }}</td>
         <td>{{ message.text }}</td>
+        <td>
+          <form method="GET" action="{{ url_for('messages_edit', message_id=message.id) }}">
+            <input type="submit" value="Edit">
+          </form>
+        </td>
+        <td>
+          <form method="POST" action="{{ url_for('messages_delete', message_id=message.id) }}">
+            <input type="submit" value="Delete">
+          </form>
+        </td>
       </tr>
     {% endfor %}
   </table>
