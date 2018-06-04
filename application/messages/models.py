@@ -1,5 +1,6 @@
 from application import db
 from application.chatusers.models import ChatUser
+from application.users.models import User
 from datetime import datetime as time
 
 
@@ -16,3 +17,14 @@ class Message(db.Model):
 	def find_all_in_chat(chat_id):  # TODO ignores id and fetches all messages
 		return Message.query.join(ChatUser, ChatUser.chat_id == chat_id)\
 			.all()
+
+	def get_user(self):
+		return User.query.get(
+			ChatUser.query.get(self.chat_user_id).user_id
+		).username
+
+	def get_date(self):
+		return self.date.ctime()
+
+	def get_text(self):
+		return self.text

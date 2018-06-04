@@ -10,7 +10,7 @@ from flask_login import login_required, current_user
 
 @app.route("/chats/new", methods=["GET", "POST"])
 @login_required
-def chats_create():
+def chats_create():  # TODO check that name is available
 	form = ChatForm()
 	if form.validate_on_submit():
 		chat = Chat(form.name.data)
