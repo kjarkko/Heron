@@ -2,5 +2,12 @@
 
 {% block body %}
 
+<ul>
+  {% for chat in chats %}
+    <li>
+      <a href="{{ url_for('chats_view', chat_id=chat.id) }}"><p>{{ chat.name }}</p></a>
+    </li>
+  {% endfor %}
+</ul>
 
 {% endblock %}

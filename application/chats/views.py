@@ -26,7 +26,10 @@ def chats_create():
 @app.route("/chats/all")
 @login_required
 def chats_all():
-	return "TODO"
+	return render_template(
+		"chats/all.html",
+		chats=ChatUser.all_chats(current_user.id)
+	)
 
 
 @app.route("/chats/post/<chat_id>", methods=["POST"])

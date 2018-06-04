@@ -17,7 +17,7 @@ def users_new():
 		usr = User(form.username.data, form.password.data)
 		db.session.add(usr)
 		db.session.commit()
-		return redirect(url_for("users_all"))
+		return redirect(url_for("index"))
 	return render_template("users/new.html", form=form)
 
 
