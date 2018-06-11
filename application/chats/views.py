@@ -82,7 +82,9 @@ def chats_view(chat_id):
 
 
 def _get_chats(user_id):
-	return Chat.query.join(ChatUser, ChatUser.user_id == user_id).all()
+	return Chat.query.join(ChatUser)\
+		.filter(ChatUser.user_id == user_id)\
+		.all()
 
 
 def _member_of(user_id, chat_id):

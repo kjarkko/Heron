@@ -36,18 +36,3 @@ class Message(Base):
 				'text': row[2]
 			})
 		return msg
-
-
-# 		return Message.query.join(ChatUser)\
-# 			.filter(ChatUser.chat_id == chat_id)
-
-	def get_user(self):
-		return User.query.get(
-			ChatUser.query.get(self.chat_user_id).user_id
-		).username
-
-	def get_date(self):
-		return self.date_created
-
-	def get_text(self):
-		return self.text
