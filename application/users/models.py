@@ -24,3 +24,9 @@ class User(Base):
 
 	def is_authenticated(self):
 		return True
+
+	def find_all_chats(self):
+		pass
+
+	def admin_of(self, chat):
+		pass

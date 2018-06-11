@@ -33,9 +33,9 @@
     </tr>
     {% for message in messages %}
       <tr>
-        <td>{{ message.get_user() }}</td>
-        <td>{{ message.get_date() }}</td>
-        <td>{{ message.get_text() }}</td>
+        <td>{{ message.user }}</td>
+        <td>{{ message.date }}</td>
+        <td>{{ message.text }}</td>
         <td>
           <form method="GET" action="{{ url_for('messages_edit', message_id=message.id) }}">
             <input type="submit" value="Edit">
