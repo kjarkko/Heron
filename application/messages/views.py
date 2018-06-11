@@ -22,7 +22,7 @@ def messages_edit(message_id):  # TODO validate user
 	form = MessageForm()
 	msg = Message.query.get(message_id)
 	if form.validate_on_submit():
-		msg.text = form.text.data
+		msg.edit(form.text.data)
 		db.session.commit()
 		return redirect(url_for("index"))
 	return render_template("messages/edit.html", form=form, message=msg)

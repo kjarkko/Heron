@@ -1,4 +1,5 @@
 from application import db
+from application.chatusers.models import ChatUser
 
 
 class Chat(db.Model):
@@ -7,3 +8,6 @@ class Chat(db.Model):
 
 	def __init__(self, name):
 		self.name = name
+
+	def is_admin(self, user_id):
+		return ChatUser.find(user_id, self.id).admin

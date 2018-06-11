@@ -21,8 +21,8 @@
     </ul>
     <div class="form-inline mt-2 mt-md-0">
       {% if current_user.is_authenticated %}
-        {{ current_user.username }}
-        <a href="{{ url_for('users_logout') }}">Log out</a>
+        
+        <a href="{{ url_for('users_logout') }}">{{ current_user.username }} - Log out</a>
       {% else %}
         <a href="{{ url_for('users_login') }}">Log in</a>
       {% endif %}

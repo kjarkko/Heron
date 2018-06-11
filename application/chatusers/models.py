@@ -1,5 +1,4 @@
 from application import db
-from application.chats.models import Chat
 
 
 class ChatUser(db.Model):
@@ -15,9 +14,6 @@ class ChatUser(db.Model):
 
 	def find(user_id, chat_id):
 		return ChatUser.query.filter_by(user_id=user_id, chat_id=chat_id).first()
-
-	def all_chats(user_id):
-		return Chat.query.join(ChatUser, ChatUser.user_id == user_id).all()
 
 	def all_messages(chat_id):
 		pass

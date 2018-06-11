@@ -1,6 +1,11 @@
 {% extends "layout.html" %}
 
 {% block body %}
+
+  {% if chat.is_admin(current_user.id) %}
+    <a href="{{ url_for('chats_add_user', chat_id=chat.id) }}"><p>Add user</p></a>
+  {% endif %}
+
   <form method="POST" action="{{ url_for('chats_post', chat_id=chat.id) }}">
     <table>
 
