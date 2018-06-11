@@ -1,13 +1,12 @@
 from application import db
+from application.models import Base
 from application.chatusers.models import ChatUser
 from application.users.models import User
 from datetime import datetime as time
 
 
-class Message(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
+class Message(Base):
 	chat_user_id = db.Column(db.Integer, db.ForeignKey("chat_user.id"))
-	date = db.Column(db.DateTime, default=time.utcnow)
 	text = db.Column(db.String(2048), nullable=False)
 
 	def __init__(self, chat_user_id, text):
@@ -24,7 +23,7 @@ class Message(db.Model):
 		).username
 
 	def get_date(self):
-		return self.date.ctime()
+		return self.date_created
 
 	def get_text(self):
 		return self.text

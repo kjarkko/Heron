@@ -1,15 +1,13 @@
 from application import db
+from application.models import Base
 
 _CTIME = db.func.current_timestamp
 
 
-class User(db.Model):
+class User(Base):
 
 	__tablename__ = "account"
 
-	id = db.Column(db.Integer, primary_key=True)
-	date_created = db.Column(db.DateTime, default=_CTIME())
-	date_modified = db.Column(db.DateTime, default=_CTIME(), onupdate=_CTIME())
 	username = db.Column(db.String(16), nullable=False, unique=True)
 	password = db.Column(db.String(32), nullable=False)
 
