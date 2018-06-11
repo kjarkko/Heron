@@ -21,9 +21,10 @@ class Message(Base):
 	def find_all_in_chat(chat_id):
 		stmt = text(
 			"SELECT Account.username, Message.date_created, Message.text "
-			"	FROM message, chat_user, Account "
+			"	FROM Message, Account "
+			"LEFT JOIN Chat_user ON Chat_user.user_id = Account.id "
 			"WHERE chat_user.chat_id = :chat_id "
-			"	AND Account.id = chat_user.user_id "
+			"AND message.chat_user_id = chat_user.id "
 			"GROUP BY message.date_created "
 		).params(chat_id=chat_id)
 		res = db.engine.execute(stmt)
