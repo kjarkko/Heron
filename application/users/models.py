@@ -1,8 +1,6 @@
 from application import db
 from application.models import Base
 
-_CTIME = db.func.current_timestamp
-
 
 class User(Base):
 

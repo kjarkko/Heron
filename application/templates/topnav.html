@@ -1,44 +1,31 @@
-<div class="topnav">
-  <style type="text/css">
-    .topnav {
-      background-color: #282828;
-    }
-    .topnav ul {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-    }
-    .topnav li {
-      float: left;
-    }
-    .topnav li.right{
-      float: right;
-    }
-    .topnav li a {
-      display: block;
-      color: #f5f5f5;
-      padding: 14px 16px;
-      text-align: center;
-      text-decoration: none;
-    }
-    .topnav li a:hover {
-      background-color: #111;
-    }
-  </style>
-	
-  <ul>
-    <li><a href="{{ url_for('index') }}"><b>Home</b></a></li>
-    <li><a href="{{ url_for('users_new') }}">Create user</a></li>
-    <li><a href="{{ url_for('users_all') }}">List users</a></li>
-    <li><a href="{{ url_for('chats_all') }}">List chats</a></li>
-    <li><a href="{{ url_for('chats_create') }}">New chat</a></li>
-    <li class="right">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+	<a class="navbar-brand" href="#">Heron</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+  </button>
+  
+	<div class="collapse navbar-collapse" id="navbarCollapse">
+    <ul class="navbar-nav mr-auto">
       {% if current_user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('chats_all') }}">List chats</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('chats_create') }}">New chat</a>
+        </li>
+      {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('users_new') }}">Create user</a>
+        </li>
+      {% endif %}
+    </ul>
+    <div class="form-inline mt-2 mt-md-0">
+      {% if current_user.is_authenticated %}
+        {{ current_user.username }}
         <a href="{{ url_for('users_logout') }}">Log out</a>
       {% else %}
         <a href="{{ url_for('users_login') }}">Log in</a>
       {% endif %}
-    </li>
-  </ul>
-</div>
+    </div>
+	</div>
+</nav>
