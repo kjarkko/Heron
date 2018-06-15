@@ -30,3 +30,7 @@ class User(Base):
 
 	def admin_of(self, chat):
 		pass
+
+	@staticmethod
+	def name_free(name):
+		return User.query.filter(User.username == name).first() is None

@@ -1,8 +1,15 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
-from wtforms.validators import InputRequired, Length, EqualTo
+from wtforms.validators import InputRequired, Length, EqualTo, ValidationError
+from application.users.models import User
 
-_UVALID = [InputRequired(), Length(min=3, max=16)]
+
+def _name_in_use(form, field):
+	if not User.name_free(field.data):
+		raise ValidationError('name in use')
+
+
+_UVALID = [InputRequired(), Length(min=3, max=16), _name_in_use]
 _PVALID = [
 	InputRequired(),
 	Length(min=5, max=32),
