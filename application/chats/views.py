@@ -11,15 +11,13 @@ from flask_login import login_required, current_user
 
 @app.route("/chats/new", methods=["GET", "POST"])
 @login_required
-def chats_create():  # TODO check that name is available
+def chats_create():
 	form = ChatForm()
 	if form.validate_on_submit():
 		chat = Chat(form.name.data)
 		db.session.add(chat)
 		db.session.commit()
-		chat_user = ChatUser(current_user.id, chat.id, True)
-		db.session.add(chat_user)
-		db.session.commit()
+		ChatUser.create(current_user.id, chat.id, True)
 		return redirect("/chats/" + str(chat.id))
 	return render_template("/chats/new.html", form=form)
 

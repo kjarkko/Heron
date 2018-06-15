@@ -20,7 +20,7 @@ from application import views
 from application.users import models, views
 from application.chats import models, views
 from application.messages import models, views
-from application.chatusers import models, views
+from application.chatusers import models
 
 # User authentication
 from application.users.models import User

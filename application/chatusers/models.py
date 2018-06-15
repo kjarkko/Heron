@@ -13,7 +13,12 @@ class ChatUser(db.Model):
 		self.admin = admin
 
 	def find(user_id, chat_id):
-		return ChatUser.query.filter_by(user_id=user_id, chat_id=chat_id).first()
+		return ChatUser.query\
+			.filter_by(user_id=user_id, chat_id=chat_id)\
+			.first()
 
-	def all_messages(chat_id):
-		pass
+	@staticmethod
+	def create(user_id, chat_id, admin=False):
+		cu = ChatUser(user_id, chat_id, admin)
+		db.session.add(cu)
+		db.session.commit()
