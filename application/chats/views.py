@@ -85,6 +85,9 @@ def _get_chats(user_id):
 		.all()
 
 
+app.jinja_env.globals.update(chats_all=_get_chats)
+
+
 def _member_of(user_id, chat_id):
 	return True
 

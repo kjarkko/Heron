@@ -13,13 +13,5 @@ class Chat(db.Model):
 	def exists(name):
 		return Chat.query.filter(Chat.name == name).first() is not None
 
-	@staticmethod
-	def find_members(chat_id):
-		return db.session.query('account')\
-			.join('chat_user')\
-			.join('chat')\
-			.filter('chat_user.chat_id' == chat_id)\
-			.all()
-
 	def is_admin(self, user_id):
 		return ChatUser.find(user_id, self.id).admin

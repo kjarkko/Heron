@@ -2,19 +2,11 @@
 
 {% block body %}
 <form method="POST" action="{{ url_for('messages_edit', message_id=message.id) }}">
-	<table>
-	    
-	  <tr>
-	    <td>{{ form.text.label }}</td>
-	    <td>{{ form.text }}</td>
-	  </tr>
-	    
-	  <tr>
-	    <td colspan="2">
-	      <input type="submit" value="Edit"/>
-	    </td>
-	  </tr>
-	    
-  </table>
+	<div class="form-group">
+      {{ form.text.label(class_="sr-only") }}
+      {{ form.text(class_="form-control") }}
+  </div>
+
+  <button type="submit" class="btn btn-primary">Edit</button>
 </form>
 {% endblock %}

@@ -20,7 +20,7 @@ class Message(Base):
 	@staticmethod
 	def find_all_in_chat(chat_id):
 		stmt = text(
-			"SELECT Account.username, Message.date_created, Message.text "
+			"SELECT Account.username, Message.date_created, Message.text, Message.id "
 			"	FROM Message, Account "
 			"LEFT JOIN Chat_user ON Chat_user.user_id = Account.id "
 			"WHERE chat_user.chat_id = :chat_id "
@@ -33,6 +33,7 @@ class Message(Base):
 			msg.append({
 				'name': row[0],
 				'date': row[1],
-				'text': row[2]
+				'text': row[2],
+				'id': row[3]
 			})
 		return msg

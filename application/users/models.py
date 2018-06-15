@@ -1,5 +1,6 @@
 from application import db
 from application.models import Base
+from sqlalchemy.sql import text
 
 
 class User(Base):
@@ -30,6 +31,22 @@ class User(Base):
 
 	def admin_of(self, chat):
 		pass
+
+	@staticmethod
+	def find_members(chat_id):
+		stmt = text(
+			"SELECT Account.username FROM Account "
+			"LEFT JOIN Chat_user ON Chat_user.user_id = Account.id "
+			"WHERE chat_user.chat_id = :chat_id "
+			"ORDER BY Account.username "
+		).params(chat_id=chat_id)
+		res = db.engine.execute(stmt)
+		users = []
+		for row in res:
+			users.append({
+				'username': row[0]
+			})
+		return users
 
 	@staticmethod
 	def exists(name):

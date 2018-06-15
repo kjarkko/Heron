@@ -2,51 +2,20 @@
 
 {% block body %}
 
-  {% if chat.is_admin(current_user.id) %}
-    <a href="{{ url_for('chats_add_user', chat_id=chat.id) }}"><p>Add user</p></a>
-  {% endif %}
-
-  <form method="POST" action="{{ url_for('chats_post', chat_id=chat.id) }}">
-    <table>
-
-      <tr>
-        <td>{{ form.text.label }}</td>
-        <td>{{ form.text }}</td>
-      </tr>
-
-      <tr>
-        <td colspan="2">
-          <input type="submit" value="Send message"/>
-        </td>
-      </tr>
-
-    </table>
-  </form>
-
-  <table>
-    <tr>
-      <th>User</th>
-      <th>Date</th>
-      <th>Message</th>
-      <th>Edit</th>
-      <th>Delete</th>
-    </tr>
+  
+  <div class="container">
+    <form class="form-inline" method="POST" action="{{ url_for('chats_post', chat_id=chat.id) }}">
+      <div class="form-group mx-sm-3 mb-2">
+          {{ form.text.label(class_="sr-only") }}
+          {{ form.text(class_="form-control") }}
+      </div>
+      <button type="submit" class="btn btn-primary mb-2 float-right">Send</button>
+      {% if chat.is_admin(current_user.id) %}
+        <a class="btn btn-primary mb-2 ml-2 float-right" href="{{ url_for('chats_add_user', chat_id=chat.id) }}" role="button">Add user</a>
+      {% endif %}
+    </form>
     {% for message in messages %}
-      <tr>
-        <td>{{ message.name }}</td>
-        <td>{{ message.date }}</td>
-        <td>{{ message.text }}</td>
-        <td>
-          <form method="GET" action="{{ url_for('messages_edit', message_id=message.id) }}">
-            <input type="submit" value="Edit">
-          </form>
-        </td>
-        <td>
-          <form method="POST" action="{{ url_for('messages_delete', message_id=message.id) }}">
-            <input type="submit" value="Delete">
-          </form>
-        </td>
-      </tr>
+      {% include "messages/message.html" %}
     {% endfor %}
-  </table>
+  </div>
 {% endblock %}
