@@ -10,6 +10,10 @@ class Chat(db.Model):
 		self.name = name
 
 	@staticmethod
+	def exists(name):
+		return Chat.query.filter(Chat.name == name).first() is not None
+
+	@staticmethod
 	def find_members(chat_id):
 		return db.session.query('account')\
 			.join('chat_user')\

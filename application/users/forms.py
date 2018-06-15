@@ -5,7 +5,7 @@ from application.users.models import User
 
 
 def _name_in_use(form, field):
-	if not User.name_free(field.data):
+	if User.exists(field.data):
 		raise ValidationError('name in use')
 
 

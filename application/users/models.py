@@ -32,5 +32,5 @@ class User(Base):
 		pass
 
 	@staticmethod
-	def name_free(name):
-		return User.query.filter(User.username == name).first() is None
+	def exists(name):
+		return User.query.filter(User.username == name).first() is not None
