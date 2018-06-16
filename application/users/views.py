@@ -14,9 +14,7 @@ def users_all():
 def users_new():
 	form = UserCreateForm()
 	if form.validate_on_submit():
-		usr = User(form.username.data, form.password.data)
-		db.session.add(usr)
-		db.session.commit()
+		User.create(form.username.data, form.password.data)
 		return redirect(url_for("index"))
 	return render_template("users/new.html", form=form)
 
@@ -26,9 +24,7 @@ def users_login():
 	if request.method == "GET":
 		return render_template("users/login.html", form=UserLoginForm())
 	form = UserLoginForm(request.form)
-	user = User.query.filter_by(
-		username=form.username.data, password=form.password.data
-	).first()
+	user = User.get(form.username.data, form.password.data)
 	if not user:
 		return render_template(
 			"users/login.html",
@@ -47,7 +43,5 @@ def users_logout():
 
 @app.route("/users/delete/<user_id>", methods=["POST"])
 def users_delete(user_id):
-	user = User.query.get(user_id)
-	db.session.delete(user)
-	db.session.commit()
+	User.delete(user_id)
 	return redirect(url_for("users_all"))

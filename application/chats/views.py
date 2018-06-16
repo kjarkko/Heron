@@ -14,9 +14,7 @@ from flask_login import login_required, current_user
 def chats_create():
 	form = ChatForm()
 	if form.validate_on_submit():
-		chat = Chat(form.name.data)
-		db.session.add(chat)
-		db.session.commit()
+		chat = Chat.create(form.name.data)
 		ChatUser.create(current_user.id, chat.id, True)
 		return redirect("/chats/" + str(chat.id))
 	return render_template("/chats/new.html", form=form)
@@ -27,8 +25,11 @@ def chats_create():
 def chats_all():
 	return render_template(
 		"chats/all.html",
-		chats=_get_chats(current_user.id)
+		chats=Chat.find_by_user(current_user.id)
 	)
+
+
+app.jinja_env.globals.update(chats_all=Chat.find_by_user)
 
 
 @app.route("/chats/post/<chat_id>", methods=["POST"])
@@ -37,9 +38,10 @@ def chats_post(chat_id):
 	if not _member_of(current_user.id, chat_id):
 		return "not member of chat"
 	form = MessageForm(request.form)
-	msg = Message(ChatUser.find(current_user.id, chat_id).id, form.text.data)
-	db.session.add(msg)
-	db.session.commit()
+	Message.create(
+		ChatUser.find(current_user.id, chat_id).id,
+		form.text.data
+	)
 	return redirect("/chats/" + chat_id)
 
 
@@ -48,17 +50,14 @@ def chats_post(chat_id):
 def chats_add_user(chat_id):
 	if not _admin_of(current_user.id, chat_id):
 		return "not admin of chat"
-	chat = Chat.query.get(chat_id)
+	chat = Chat.get(chat_id)
 	if not chat:
 		return redirect(url_for('chats_view', chat_id=chat_id))
 	form = AddUserForm()
 	if form.validate_on_submit():
-		user_id = User.query.filter(User.username == form.name.data)\
-			.first().id
+		user_id = User.get(form.name.data).id
 		if ChatUser.find(user_id, chat_id) is None:
-			cu = ChatUser(user_id, chat_id)
-			db.session.add(cu)
-			db.session.commit()
+			ChatUser.create(user_id, chat_id)
 		return redirect(url_for('chats_view', chat_id=chat_id))
 	return render_template("/chats/adduser.html", form=form, chat=chat)
 
@@ -68,7 +67,7 @@ def chats_add_user(chat_id):
 def chats_view(chat_id):
 	if not _member_of(current_user.id, chat_id):
 		return "not member of chat"
-	chat = Chat.query.get(chat_id)
+	chat = Chat.get(chat_id)
 	if not chat:
 		return redirect(url_for('chats_all'))
 	return render_template(
@@ -79,18 +78,10 @@ def chats_view(chat_id):
 	)
 
 
-def _get_chats(user_id):
-	return Chat.query.join(ChatUser)\
-		.filter(ChatUser.user_id == user_id)\
-		.all()
-
-
-app.jinja_env.globals.update(chats_all=_get_chats)
-
-
 def _member_of(user_id, chat_id):
-	return True
+	return ChatUser.find(user_id, chat_id) is not None
 
 
 def _admin_of(user_id, chat_id):
-	return ChatUser.find(user_id, chat_id).admin
+	cu = ChatUser.find(user_id, chat_id)
+	return cu is not None and cu.admin is True

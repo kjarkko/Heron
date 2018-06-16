@@ -2,7 +2,7 @@ from application import db
 from application.models import Base
 from application.chatusers.models import ChatUser
 from application.users.models import User
-from datetime import datetime as time
+import datetime
 from sqlalchemy.sql import text
 
 
@@ -16,6 +16,23 @@ class Message(Base):
 
 	def edit(self, text):
 		self.text = text
+		db.session.commit()
+
+	@staticmethod
+	def create(chat_user_id, text):
+		msg = Message(chat_user_id, text)
+		db.session.add(msg)
+		db.session.commit()
+		return msg
+
+	@staticmethod
+	def delete(message_id):
+		db.session.delete(Message.query.get(message_id))
+		db.session.commit()
+
+	@staticmethod
+	def get(message_id):
+		return Message.query.get(message_id)
 
 	@staticmethod
 	def find_all_in_chat(chat_id):

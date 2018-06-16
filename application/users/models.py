@@ -33,6 +33,31 @@ class User(Base):
 		pass
 
 	@staticmethod
+	def create(username, password):
+		u = User(username, password)
+		db.session.add(u)
+		db.session.commit()
+		return u
+
+	@staticmethod
+	def delete(user_id):
+		user = User.query.get(user_id)
+		db.session.delete(user)
+		db.session.commit()
+
+	@staticmethod
+	def get(username, password=None):
+		if password is not None:
+			return User.query.filter(
+				User.username == username,
+				User.password == password
+			).first()
+		else:
+			return User.query.filter(
+				User.username == username
+			).first()
+
+	@staticmethod
 	def find_members(chat_id):
 		stmt = text(
 			"SELECT Account.username FROM Account "
@@ -49,5 +74,12 @@ class User(Base):
 		return users
 
 	@staticmethod
-	def exists(name):
-		return User.query.filter(User.username == name).first() is not None
+	def exists(username, password=None):
+		if password is None:
+			return User.query\
+				.filter(User.username == username)\
+				.first() is not None
+		else:
+			return User.query\
+				.filter(User.username == username, User.password == password)\
+				.first() is not None
