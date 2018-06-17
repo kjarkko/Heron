@@ -5,20 +5,34 @@ class ChatUser(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	user_id = db.Column(db.Integer, db.ForeignKey("account.id"), nullable=False)
 	chat_id = db.Column(db.Integer, db.ForeignKey("chat.id"), nullable=False)
-	admin = db.Column(db.Boolean, nullable=False)
+	moderator = db.Column(db.Boolean, nullable=False)
 
-	def __init__(self, user_id, chat_id, admin=False):
+	def __init__(self, user_id, chat_id, moderator=False):
 		self.user_id = user_id
 		self.chat_id = chat_id
-		self.admin = admin
+		self.moderator = moderator
 
+	def is_moderator(self):
+		return self.moderator is not None
+
+	@staticmethod
+	def get(cu_id):
+		return ChatUser.query.get(cu_id)
+
+	@staticmethod
+	def find_by_user(user_id):
+		return ChatUser.query\
+			.filter_by(user_id=user_id)\
+			.first()
+
+	@staticmethod
 	def find(user_id, chat_id):
 		return ChatUser.query\
 			.filter_by(user_id=user_id, chat_id=chat_id)\
 			.first()
 
 	@staticmethod
-	def create(user_id, chat_id, admin=False):
-		cu = ChatUser(user_id, chat_id, admin)
+	def create(user_id, chat_id, moderator=False):
+		cu = ChatUser(user_id, chat_id, moderator)
 		db.session.add(cu)
 		db.session.commit()

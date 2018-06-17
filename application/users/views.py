@@ -1,13 +1,17 @@
-from application import app, db
+from application import app, db, login_required
 from application.users.models import User
 from application.users.forms import UserCreateForm, UserLoginForm
 from flask import redirect, url_for, render_template, request
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, login_manager, current_user
 
 
 @app.route("/users/", methods=["GET"])
+@login_required()
 def users_all():
-	return render_template("users/all.html", users=User.query.all())
+	if current_user.is_admin():
+		return render_template("users/all.html", users=User.query.all())
+	else:
+		return login_manager.unauthorized()
 
 
 @app.route("/users/new", methods=["GET", "POST"])
@@ -42,6 +46,7 @@ def users_logout():
 
 
 @app.route("/users/delete/<user_id>", methods=["POST"])
+@login_required(role="ADMIN")
 def users_delete(user_id):
 	User.delete(user_id)
 	return redirect(url_for("users_all"))

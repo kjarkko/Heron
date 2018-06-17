@@ -1,4 +1,4 @@
-from application import app, db
+from application import app, db, login_required
 from application.chats.models import Chat
 from application.chats.forms import ChatForm, AddUserForm
 from application.chatusers.models import ChatUser
@@ -6,11 +6,11 @@ from application.messages.models import Message
 from application.messages.forms import MessageForm
 from application.users.models import User
 from flask import request, redirect, render_template, url_for
-from flask_login import login_required, current_user
+from flask_login import current_user, login_manager
 
 
 @app.route("/chats/new", methods=["GET", "POST"])
-@login_required
+@login_required("ANY")
 def chats_create():
 	form = ChatForm()
 	if form.validate_on_submit():
@@ -21,19 +21,21 @@ def chats_create():
 
 
 @app.route("/chats/all")
-@login_required
+@login_required()
 def chats_all():
-	return render_template(
-		"chats/all.html",
-		chats=Chat.find_by_user(current_user.id)
-	)
+	if current_user.is_admin():
+		return render_template(
+			"chats/all.html",
+			chats=Chat.all()
+		)
+	return login_manager.unauthorized()
 
 
 app.jinja_env.globals.update(chats_all=Chat.find_by_user)
 
 
 @app.route("/chats/post/<chat_id>", methods=["POST"])
-@login_required
+@login_required()
 def chats_post(chat_id):
 	if not _member_of(current_user.id, chat_id):
 		return "not member of chat"
@@ -46,10 +48,10 @@ def chats_post(chat_id):
 
 
 @app.route("/chats/adduser/<chat_id>", methods=["POST", "GET"])
-@login_required
+@login_required()
 def chats_add_user(chat_id):
 	if not _admin_of(current_user.id, chat_id):
-		return "not admin of chat"
+		return "not moderator of chat"
 	chat = Chat.get(chat_id)
 	if not chat:
 		return redirect(url_for('chats_view', chat_id=chat_id))
@@ -63,7 +65,7 @@ def chats_add_user(chat_id):
 
 
 @app.route("/chats/<chat_id>/", methods=["GET"])
-@login_required
+@login_required()
 def chats_view(chat_id):
 	if not _member_of(current_user.id, chat_id):
 		return "not member of chat"
@@ -84,4 +86,4 @@ def _member_of(user_id, chat_id):
 
 def _admin_of(user_id, chat_id):
 	cu = ChatUser.find(user_id, chat_id)
-	return cu is not None and cu.admin is True
+	return cu is not None and cu.moderator is True

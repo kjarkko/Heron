@@ -1,7 +1,5 @@
 from application import db
 from application.models import Base
-from application.chatusers.models import ChatUser
-from application.users.models import User
 import datetime
 from sqlalchemy.sql import text
 

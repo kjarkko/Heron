@@ -10,6 +10,10 @@ class Chat(db.Model):
 		self.name = name
 
 	@staticmethod
+	def all():
+		return Chat.query.all()
+
+	@staticmethod
 	def get(chat_id):
 		return Chat.query.get(chat_id)
 
@@ -31,4 +35,4 @@ class Chat(db.Model):
 		return Chat.query.filter(Chat.name == name).first() is not None
 
 	def is_admin(self, user_id):
-		return ChatUser.find(user_id, self.id).admin
+		return ChatUser.find(user_id, self.id).moderator

@@ -1,6 +1,9 @@
 from application import db
 from application.models import Base
+from application.chatusers.models import ChatUser
+from application.messages.models import Message
 from sqlalchemy.sql import text
+from sqlalchemy.types import Boolean
 
 
 class User(Base):
@@ -9,10 +12,31 @@ class User(Base):
 
 	username = db.Column(db.String(16), nullable=False, unique=True)
 	password = db.Column(db.String(32), nullable=False)
+	admin = db.column(Boolean())
 
-	def __init__(self, username, password):
+	def __init__(self, username, password, admin=False):
 		self.username = username
 		self.password = password
+		self.admin = admin
+
+	def roles(self, chat_id=None, msg_id=None):
+		roles = []
+		if self.admin is True:
+			roles.append('ADMIN')
+		if chat_id is not None:
+			cu = ChatUser.find(self.id, chat_id)
+			if cu is not None:
+				roles.append('MEMBER')
+				if cu.moderator:
+					roles.append('MODERATOR')
+		if msg_id is not None:
+			cu = ChatUser.get(Message.get(msg_id).chat_user_id)
+			if cu.user_id == self.id:
+				roles.append('POSTER')
+		return roles
+
+	def is_admin(self):
+		return self.admin is not None
 
 	def get_id(self):
 		return self.id
@@ -29,8 +53,8 @@ class User(Base):
 	def find_all_chats(self):
 		pass
 
-	def admin_of(self, chat):
-		pass
+	def moderator_of(self, chat_id):
+		return ChatUser.find(self.id, chat_id).moderator
 
 	@staticmethod
 	def create(username, password):

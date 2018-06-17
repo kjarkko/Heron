@@ -13,6 +13,14 @@
         <li class="nav-item">
             <a class="nav-link" href="{{ url_for('chats_create') }}">New chat</a>
         </li>
+        {% if current_user.is_admin() %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('users_all') }}">User management</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('chats_all') }}">Chat management</a>
+          </li>
+        {% endif %}
       {% else %}
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('users_new') }}">Create user</a>
