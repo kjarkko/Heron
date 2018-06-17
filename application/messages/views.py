@@ -22,14 +22,19 @@ def messages_edit(message_id):
 
 @app.route("/messages/delete/<message_id>", methods=["GET", "POST"])
 @login_required
-def messages_delete(message_id):  # TODO validate user
+def messages_delete(message_id):
+	if not current_user.is_admin():
+		return
 	Message.delete(message_id)
 	return redirect(url_for("index"))
 
 
 def _is_auth(message_id):
-	if current_user.roles().contains("ADMIN"):
+	if current_user.is_admin():
 		return True
+	if _is_sender(message_id):
+		return True
+	# TODO: check if moderator
 	return False
 
 

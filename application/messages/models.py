@@ -33,15 +33,16 @@ class Message(Base):
 		return Message.query.get(message_id)
 
 	@staticmethod
-	def find_all_in_chat(chat_id):
+	def find_all_in_chat(chat_id, after=0):
 		stmt = text(
 			"SELECT Account.username, Message.date_created, Message.text, Message.id "
 			"	FROM Message, Account "
 			"LEFT JOIN Chat_user ON Chat_user.user_id = Account.id "
-			"WHERE chat_user.chat_id = :chat_id "
+			"WHERE (chat_user.chat_id = :chat_id "
 			"	AND Message.chat_user_id = Chat_user.id "
+			"	AND Message.id > :after) "
 			"ORDER BY Message.date_created "
-		).params(chat_id=chat_id)
+		).params(chat_id=chat_id, after=after)
 		res = db.engine.execute(stmt)
 		msg = []
 		for row in res:

@@ -14,8 +14,29 @@
         <a class="btn btn-primary mb-2 ml-2 float-right" href="{{ url_for('chats_add_user', chat_id=chat.id) }}" role="button">Add user</a>
       {% endif %}
     </form>
-    {% for message in messages %}
-      {% include "messages/message.html" %}
-    {% endfor %}
+    <div class="container" id="messages">
+      
+      {% for message in messages %}
+        {% include "messages/message.html" %}
+      {% endfor %}
+    </div>
   </div>
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+
+      window.setInterval( function(){ updateMessages(); }, 1000);
+
+      function updateMessages(){
+        $.getJSON(
+          $SCRIPT_ROOT + '/chats/_m/',
+          {chat_id: '{{ chat.id }}' },
+          function(data){
+            $('#messages').html(data.messages)
+          }
+        )
+      }
+    });
+  </script>
+
 {% endblock %}

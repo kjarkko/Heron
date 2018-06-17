@@ -5,7 +5,7 @@ from application.chatusers.models import ChatUser
 from application.messages.models import Message
 from application.messages.forms import MessageForm
 from application.users.models import User
-from flask import request, redirect, render_template, url_for
+from flask import request, redirect, render_template, url_for, jsonify
 from flask_login import current_user, login_manager
 
 
@@ -77,6 +77,20 @@ def chats_view(chat_id):
 		chat=chat,
 		messages=Message.find_all_in_chat(chat_id),
 		form=MessageForm()
+	)
+
+
+@app.route("/chats/_m/")
+@login_required()
+def chats_get_messages():
+	chat_id = request.args.get('chat_id', 0, type=int)
+	if not _member_of(current_user.id, chat_id):
+		return "not member of chat"
+	return jsonify(
+		messages=render_template(
+			'messages/messages.html',
+			messages=Message.find_all_in_chat(chat_id)
+		)
 	)
 
 
