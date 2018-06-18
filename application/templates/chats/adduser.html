@@ -3,6 +3,11 @@
     <div class="form-group">
       {{ form.name.label(class_="sr-only") }}
       {{ form.name(class_="form-control", placeholder="Username") }}
+      <ul>
+        {% for error in form.name.errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
     </div>
     <button type="submit" class="btn btn-primary">Add user</button>
   </form>

@@ -12,12 +12,12 @@ class User(Base):
 
 	username = db.Column(db.String(16), nullable=False, unique=True)
 	password = db.Column(db.String(32), nullable=False)
-	admin = db.column(db.String(8))  # TODO fix bool
+	admin = db.Column(db.Boolean(), nullable=False)
 
 	def __init__(self, username, password, admin=False):
 		self.username = username
 		self.password = password
-		self.admin = 'ADMIN' if admin is True else 'USER'
+		self.admin = admin
 
 	def roles(self, chat_id=None, msg_id=None):
 		roles = []
@@ -36,7 +36,7 @@ class User(Base):
 		return roles
 
 	def is_admin(self):
-		return self.admin == 'ADMIN'
+		return self.admin
 
 	def get_id(self):
 		return self.id
@@ -68,6 +68,10 @@ class User(Base):
 		user = User.query.get(user_id)
 		db.session.delete(user)
 		db.session.commit()
+
+	@staticmethod
+	def find_id(user_id):
+		return User.query.get(user_id)
 
 	@staticmethod
 	def get(username, password=None):

@@ -2,9 +2,15 @@
 
 {% block body %}
   <form method="POST" action="{{ url_for('chats_create') }}">
+    
     <div class="form-group mx-sm-3 mb-2">
       {{ form.name.label(class_="sr-only") }}
       {{ form.name(class_="form-control", placeholder="Chat name") }}
+      <ul>
+        {% for error in form.name.errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
     </div>
     <button type="submit" class="btn btn-primary mb-2 float-right">Create new chat</button>
 
