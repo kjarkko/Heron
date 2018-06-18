@@ -8,9 +8,6 @@
     <ul class="navbar-nav mr-auto">
       {% if current_user.is_authenticated %}
         <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('chats_all') }}">List chats</a>
-        </li>
-        <li class="nav-item">
             <a class="nav-link" href="{{ url_for('chats_create') }}">New chat</a>
         </li>
         {% if current_user.is_admin() %}

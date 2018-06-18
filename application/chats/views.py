@@ -5,8 +5,21 @@ from application.chatusers.models import ChatUser
 from application.messages.models import Message
 from application.messages.forms import MessageForm
 from application.users.models import User
-from flask import request, redirect, render_template, url_for, jsonify
+from flask import request, redirect, render_template, url_for, jsonify, abort
 from flask_login import current_user, login_manager
+
+
+@app.route("/chats/<chat_id>/management/add", methods=["POST"])
+@login_required()
+def chats_add_user(chat_id):
+	if not _admin_of(current_user.id, chat_id):
+		abort(403)
+	form = AddUserForm(request.form)
+	if form.validate():
+		user_id = User.get(form.name.data).id
+		if ChatUser.find(user_id, chat_id) is None:
+			ChatUser.create(user_id, chat_id)
+	return redirect(url_for('chats_management', chat_id=chat_id))
 
 
 @app.route("/chats/new", methods=["GET", "POST"])
@@ -28,7 +41,7 @@ def chats_all():
 			"chats/all.html",
 			chats=Chat.all()
 		)
-	return login_manager.unauthorized()
+	abort(403)
 
 
 app.jinja_env.globals.update(chats_all=Chat.find_by_user)
@@ -45,23 +58,6 @@ def chats_post(chat_id):
 		form.text.data
 	)
 	return redirect("/chats/" + chat_id)
-
-
-@app.route("/chats/adduser/<chat_id>", methods=["POST", "GET"])
-@login_required()
-def chats_add_user(chat_id):
-	if not _admin_of(current_user.id, chat_id):
-		return "not moderator of chat"
-	chat = Chat.get(chat_id)
-	if not chat:
-		return redirect(url_for('chats_view', chat_id=chat_id))
-	form = AddUserForm()
-	if form.validate_on_submit():
-		user_id = User.get(form.name.data).id
-		if ChatUser.find(user_id, chat_id) is None:
-			ChatUser.create(user_id, chat_id)
-		return redirect(url_for('chats_view', chat_id=chat_id))
-	return render_template("/chats/adduser.html", form=form, chat=chat)
 
 
 @app.route("/chats/<chat_id>/", methods=["GET"])
@@ -94,10 +90,36 @@ def chats_get_messages():
 	)
 
 
+@app.route("/chats/<chat_id>/management")
+@login_required()
+def chats_management(chat_id):
+	if not _member_of(current_user.id, chat_id):
+		abort(403)
+	chat = Chat.get(chat_id)
+	users = User.find_members(chat_id)
+	return render_template(
+		"chats/management.html",
+		users=users,
+		chat=chat,
+		form=AddUserForm()
+	)
+
+
+@app.route("/chats/<chat_id>/management/delete/<user_id>", methods=["POST"])
+@login_required()
+def chats_delete_user(chat_id, user_id):
+	if not _admin_of(current_user.id, chat_id):
+		abort(403)
+	cu = ChatUser.find(user_id, chat_id)
+	if cu is not None:
+		ChatUser.delete(cu)
+	return redirect(url_for('chats_management', chat_id=chat_id))
+
+
 def _member_of(user_id, chat_id):
 	return ChatUser.find(user_id, chat_id) is not None
 
 
 def _admin_of(user_id, chat_id):
 	cu = ChatUser.find(user_id, chat_id)
-	return cu is not None and cu.moderator is True
+	return cu.is_moderator()

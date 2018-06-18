@@ -10,9 +10,7 @@
           {{ form.text(class_="form-control") }}
       </div>
       <button type="submit" class="btn btn-primary mb-2 float-right">Send</button>
-      {% if chat.is_admin(current_user.id) %}
-        <a class="btn btn-primary mb-2 ml-2 float-right" href="{{ url_for('chats_add_user', chat_id=chat.id) }}" role="button">Add user</a>
-      {% endif %}
+      <a class="btn btn-primary mb-2 ml-2 float-right" href="{{ url_for('chats_management', chat_id=chat.id) }}" role="button">Management</a>
     </form>
     <div class="container" id="messages">
       

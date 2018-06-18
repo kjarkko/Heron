@@ -5,15 +5,20 @@ class ChatUser(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	user_id = db.Column(db.Integer, db.ForeignKey("account.id"), nullable=False)
 	chat_id = db.Column(db.Integer, db.ForeignKey("chat.id"), nullable=False)
-	moderator = db.Column(db.Boolean, nullable=False)
+	moderator = db.Column(db.String(16), nullable=False)
 
 	def __init__(self, user_id, chat_id, moderator=False):
 		self.user_id = user_id
 		self.chat_id = chat_id
-		self.moderator = moderator
+		self.moderator = 'MODERATOR' if moderator else 'USER'
 
 	def is_moderator(self):
-		return self.moderator is not None
+		return self.moderator == 'MODERATOR'
+
+	@staticmethod
+	def delete(chat_user):
+		db.session.delete(chat_user)
+		db.session.commit()
 
 	@staticmethod
 	def get(cu_id):

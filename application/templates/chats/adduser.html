@@ -1,7 +1,5 @@
-{% extends "layout.html" %}
-
 {% block body %}
-  <form method="POST" action="{{ url_for('chats_add_user', chat_id=chat.id) }}">
+  <form method="POST" action={{ url_for('.chats_add_user', chat_id=chat.id) }}>
     <table>
       <tr>
         <td>{{ form.name.label }}</td>

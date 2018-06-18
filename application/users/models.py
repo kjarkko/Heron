@@ -12,12 +12,12 @@ class User(Base):
 
 	username = db.Column(db.String(16), nullable=False, unique=True)
 	password = db.Column(db.String(32), nullable=False)
-	admin = db.column(Boolean())
+	admin = db.column(db.String(8))  # TODO fix bool
 
 	def __init__(self, username, password, admin=False):
 		self.username = username
 		self.password = password
-		self.admin = admin
+		self.admin = 'ADMIN' if admin is True else 'USER'
 
 	def roles(self, chat_id=None, msg_id=None):
 		roles = []
@@ -36,7 +36,7 @@ class User(Base):
 		return roles
 
 	def is_admin(self):
-		return self.admin is not None
+		return self.admin == 'ADMIN'
 
 	def get_id(self):
 		return self.id
@@ -84,7 +84,7 @@ class User(Base):
 	@staticmethod
 	def find_members(chat_id):
 		stmt = text(
-			"SELECT Account.username FROM Account "
+			"SELECT Account.username, Account.id FROM Account "
 			"LEFT JOIN Chat_user ON Chat_user.user_id = Account.id "
 			"WHERE chat_user.chat_id = :chat_id "
 			"ORDER BY Account.username "
@@ -93,7 +93,8 @@ class User(Base):
 		users = []
 		for row in res:
 			users.append({
-				'username': row[0]
+				'username': row[0],
+				'id': row[1]
 			})
 		return users
 
