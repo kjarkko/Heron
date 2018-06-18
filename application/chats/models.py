@@ -35,4 +35,4 @@ class Chat(db.Model):
 		return Chat.query.filter(Chat.name == name).first() is not None
 
 	def is_admin(self, user_id):
-		return ChatUser.find(user_id, self.id).moderator
+		return ChatUser.find(user_id, self.id).is_moderator()

@@ -1,17 +1,22 @@
 {% extends "layout.html" %}
 
 {% block body %}
-  {% include "chats/adduser.html" %}
+
+  {% if chat.is_admin(current_user.id) %}
+    {% include "chats/adduser.html" %}
+  {% endif %}
 
   {% for user in users %}
     <div class="container bg-light text-justify text-dark border m-2">
       <ul class="list-inline">
         <li class="list-inline-item"><h4>{{ user.username }}</h4></li>
-        <li class="list-inline-item float-right m-2">
-          <form method="POST" action="{{ url_for('chats_delete_user', chat_id=chat.id, user_id=user.id) }}">
-            <button class="btn btn-sm" type="submit">Delete</button>
-          </form>  
-        </li>
+        {% if chat.is_admin(current_user.id) %}
+          <li class="list-inline-item float-right m-2">
+            <form method="POST" action="{{ url_for('chats_delete_user', chat_id=chat.id, user_id=user.id) }}">
+              <button class="btn btn-sm" type="submit">Delete</button>
+            </form>  
+          </li>
+        {% endif %}
       </ul>
     </div>
   {% endfor %}

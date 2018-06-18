@@ -7,7 +7,7 @@
     <form class="form-inline" method="POST" action="{{ url_for('chats_post', chat_id=chat.id) }}">
       <div class="form-group mx-sm-3 mb-2">
           {{ form.text.label(class_="sr-only") }}
-          {{ form.text(class_="form-control") }}
+          {{ form.text(class_="form-control", placeholder="Type message here") }}
       </div>
       <button type="submit" class="btn btn-primary mb-2 float-right">Send</button>
       <a class="btn btn-primary mb-2 ml-2 float-right" href="{{ url_for('chats_management', chat_id=chat.id) }}" role="button">Management</a>

@@ -1,7 +1,7 @@
 from application import app, db, login_required
 from application.users.models import User
 from application.users.forms import UserCreateForm, UserLoginForm
-from flask import redirect, url_for, render_template, request
+from flask import redirect, url_for, render_template, request, abort
 from flask_login import login_user, logout_user, login_manager, current_user
 
 
@@ -11,7 +11,7 @@ def users_all():
 	if current_user.is_admin():
 		return render_template("users/all.html", users=User.query.all())
 	else:
-		return login_manager.unauthorized()
+		abort(403)
 
 
 @app.route("/users/new", methods=["GET", "POST"])
