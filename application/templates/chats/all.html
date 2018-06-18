@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block body %}
-
+<h1>WORK IN PROGRESS</h1>
 <div class="list-group">
   {% for chat in chats %}
     <a href="{{ url_for('chats_view', chat_id=chat.id) }}" class="list-group-item list-group-item-action">{{ chat.name }}</a>
