@@ -2,7 +2,8 @@
 
 {% block body %}
 <form method="POST" action="{{ url_for('messages_edit', message_id=message.id) }}">
-	<div class="form-group">
+  {{ form.csrf_token }}
+  <div class="form-group">
     {{ form.text.label(class_="sr-only") }}
     {{ form.text(class_="form-control", placehoder="Edit text") }}
     <ul>

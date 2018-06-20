@@ -22,13 +22,7 @@ class UserCreateForm(FlaskForm):
 	password = PasswordField("Password", _PVALID)
 	confirm = PasswordField("Repeat password")
 
-	class Meta:
-		csrf = False
-
 
 class UserLoginForm(FlaskForm):
 	username = StringField("Username")
 	password = PasswordField("Password")
-
-	class Meta:
-		csrf = False

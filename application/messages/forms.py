@@ -6,6 +6,3 @@ from wtforms.validators import InputRequired, Length
 class MessageForm(FlaskForm):
 
 	text = StringField('Text', [InputRequired(), Length(min=1, max=2048)])
-
-	class Meta:
-		csrf = False

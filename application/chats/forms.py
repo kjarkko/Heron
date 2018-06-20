@@ -22,15 +22,9 @@ class ChatForm(FlaskForm):
 		[InputRequired(), Length(min=1, max=16), _name_in_use]
 	)
 
-	class Meta:
-		csrf = False
-
 
 class AddUserForm(FlaskForm):
 	name = StringField(
 		"name",
 		[InputRequired(), Length(min=3, max=16), _valid_user]
 	)
-
-	class Meta:
-		csrf = False

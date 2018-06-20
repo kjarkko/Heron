@@ -2,7 +2,7 @@
 
 {% block body %}
   <form method="POST" action="{{ url_for('chats_create') }}">
-    
+    {{ form.csrf_token }}
     <div class="form-group mx-sm-3 mb-2">
       {{ form.name.label(class_="sr-only") }}
       {{ form.name(class_="form-control", placeholder="Chat name") }}

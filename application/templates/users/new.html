@@ -2,7 +2,7 @@
 
 {% block body %}
 <form method="POST" action="{{ url_for('users_new') }}">
-
+  {{ form.csrf_token }}
   <div class="form-group">
     {{ form.username.label(class_="sr-only") }}
     {{ form.username(class_="form-control", placeholder="Username") }}
