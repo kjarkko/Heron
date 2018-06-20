@@ -25,8 +25,10 @@ def messages_edit(message_id):
 def messages_delete(message_id):
 	if not _is_auth(message_id):
 		abort(403)
+	msg = Message.get(message_id)
+	chat_id = ChatUser.get(msg.chat_user_id).chat_id
 	Message.delete(message_id)
-	return redirect(url_for("index"))
+	return redirect(url_for("chats_view", chat_id=chat_id))
 
 
 def _is_auth(message_id):

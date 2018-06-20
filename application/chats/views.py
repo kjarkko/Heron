@@ -105,6 +105,15 @@ def chats_management(chat_id):
 	)
 
 
+@app.route("/chats/delete/<chat_id>", methods=["POST"])
+@login_required()
+def chats_delete(chat_id):
+	if not current_user.is_admin():
+		abort(403)
+	Chat.delete(chat_id)
+	return redirect(url_for('chats_all'))
+
+
 @app.route("/chats/<chat_id>/management/delete/<user_id>", methods=["POST"])
 @login_required()
 def chats_delete_user(chat_id, user_id):

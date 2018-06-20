@@ -12,6 +12,12 @@ class Chat(db.Model):
 		self.name = name
 
 	@staticmethod
+	def delete(chat_id):
+		chat = Chat.get(chat_id)
+		db.session.delete(chat)
+		db.session.commit()
+
+	@staticmethod
 	def all():
 		return Chat.query.all()
 
