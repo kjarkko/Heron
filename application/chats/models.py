@@ -2,11 +2,13 @@ from application import db
 from application.chatusers.models import ChatUser
 from application.messages.models import Message
 from application.users.models import User
+from sqlalchemy.orm import relationship
 
 
 class Chat(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(16), nullable=False)
+	users = relationship('ChatUser', cascade='delete')
 
 	def __init__(self, name):
 		self.name = name

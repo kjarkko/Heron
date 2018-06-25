@@ -1,4 +1,5 @@
 from application import db
+from sqlalchemy.orm import relationship
 
 
 class ChatUser(db.Model):
@@ -6,6 +7,7 @@ class ChatUser(db.Model):
 	user_id = db.Column(db.Integer, db.ForeignKey("account.id"), nullable=False)
 	chat_id = db.Column(db.Integer, db.ForeignKey("chat.id"), nullable=False)
 	moderator = db.Column(db.Boolean(), nullable=False)
+	messages = relationship('Message', cascade='delete')
 
 	def __init__(self, user_id, chat_id, moderator=False):
 		self.user_id = user_id

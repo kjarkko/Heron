@@ -2,6 +2,7 @@ from application import db
 from application.models import Base
 from application.chatusers.models import ChatUser
 from application.messages.models import Message
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql import text
 from sqlalchemy.types import Boolean
 
@@ -13,6 +14,7 @@ class User(Base):
 	username = db.Column(db.String(16), nullable=False, unique=True)
 	password = db.Column(db.String(32), nullable=False)
 	admin = db.Column(db.Boolean(), nullable=False)
+	chats = relationship('ChatUser', cascade="delete")
 
 	def __init__(self, username, password, admin=False):
 		self.username = username
