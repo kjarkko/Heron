@@ -53,6 +53,10 @@ class User(Base):
 	def find_all_chats(self):
 		pass
 
+	def set_username(self, username):
+		self.username = username
+		db.session.commit()
+
 	def moderator_of(self, chat_id):
 		return ChatUser.find(self.id, chat_id).moderator
 

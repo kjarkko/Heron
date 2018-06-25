@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block body %}
+  {% if chat.can_edit(current_user.id, message.id) %}
+    <form method="GET" action="{{ url_for('messages_edit', message_id=message.id) }}">
+      <button class="btn btn-sm mb-2" type="submit">Edit</button>
+    </form>  
+  {% endif %}
+
+  {% if chat.can_delete(current_user.id, message.id) %}
+    <form method="GET" action="{{ url_for('messages_delete', message_id=message.id) }}">
+      <button class="btn btn-sm mb-2" type="submit">Delete</button>
+    </form>
+  {% endif %}
+
+  <h4>Sent by: {{ user.username }}</h4>
+  <h4>Chat: {{ chat.name }}</h4>
+	<h4>Date Sent: {{ message.date_created }}</h4>
+  <h4>Edited: {{ message.date_modified }}</h4>
+  <p>{{ message.text }}</p>
+{% endblock %}

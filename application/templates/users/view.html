@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div class="container">
+  <h3>
+    {{ user.username }}
+  </h3>
+    {% if current_user.id == user.id %}
+      <a class="btn btn-primary my-2" href="{{ url_for('users_edit', user_id=current_user.id) }}" role="button">Change name</a>
+      <form method="POST" action="{{ url_for('users_delete', user_id=current_user.id) }}">
+        <button type="submit" class="btn btn-primary my-2">Delete</button>
+      </form>
+    {% endif %}
+  <h6>
+    Joined {{user.date_created}}
+  </h6>
+</div>
+
+<div class="container">
+  <h5>
+    Chats
+  </h5>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for chat in chats %}
+      <tr>
+        <td>{{ chat.name }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="container">
+  <h5>
+    Messages sent:
+  </h5>
+  <table class="table">
+
+    <thead>
+      <tr>
+        <th scope="col">Sent</th>
+        <th scope="col">Modified</th>
+        <th scope="col">Text</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for message in messages %}
+      <tr>
+        <td>{{ message.date_created }}</td>
+        <td>{{ message.date_modified }}</td>
+        <td>{{ message.text }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+
+  </table>
+</div>
+
+{% endblock %}

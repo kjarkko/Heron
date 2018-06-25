@@ -17,6 +17,10 @@ _PVALID = [
 ]
 
 
+class UsernameForm(FlaskForm):
+	username = StringField("Username", _UVALID)
+
+
 class UserCreateForm(FlaskForm):
 	username = StringField("Username", _UVALID)
 	password = PasswordField("Password", _PVALID)

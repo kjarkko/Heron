@@ -3,5 +3,5 @@ from application import app
 
 
 @app.route("/")
-def index():
-	return render_template("index.html")
+def index(text='Welcome to Heron'):
+	return render_template("index.html", text=text)

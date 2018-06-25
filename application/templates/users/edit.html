@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<form method="POST" action="{{ url_for('users_edit', user_id=current_user.id) }}">
+  {{ form.csrf_token }}
+  <div class="form-group">
+    {{ form.username.label(class_="sr-only") }}
+    {{ form.username(class_="form-control", placeholder="New username", value=current_user.username) }}
+    <ul>
+      {% for error in form.username.errors %}
+        <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}

@@ -51,7 +51,7 @@ app.jinja_env.globals.update(chats_all=Chat.find_by_user)
 @login_required()
 def chats_post(chat_id):
 	if not _member_of(current_user.id, chat_id):
-		return "not member of chat"
+		abort(403)
 	form = MessageForm(request.form)
 	Message.create(
 		ChatUser.find(current_user.id, chat_id).id,
@@ -64,7 +64,7 @@ def chats_post(chat_id):
 @login_required()
 def chats_view(chat_id):
 	if not _member_of(current_user.id, chat_id):
-		return "not member of chat"
+		abort(403)
 	chat = Chat.get(chat_id)
 	if not chat:
 		return redirect(url_for('chats_all'))
@@ -81,7 +81,7 @@ def chats_view(chat_id):
 def chats_get_messages():
 	chat_id = request.args.get('chat_id', 0, type=int)
 	if not _member_of(current_user.id, chat_id):
-		return "not member of chat"
+		abort(403)
 	return jsonify(
 		messages=render_template(
 			'messages/messages.html',

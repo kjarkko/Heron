@@ -3,22 +3,7 @@
     <li class="list-inline-item"><h4>{{ message.name }}</h4></li>
     <li class="list-inline-item text-muted">{{ message.date }}</li>
 
-    {% if chat.can_edit(current_user.id, message.id) %}
-      <li class="list-inline-item float-right m-2">
-        <form method="GET" action="{{ url_for('messages_edit', message_id=message.id) }}">
-          <button class="btn btn-sm" type="submit">Edit</button>
-        </form>  
-      </li>
-    {% endif %}
-
-    {% if chat.can_delete(current_user.id, message.id) %}
-      <li class="list-inline-item float-right m-2">
-        <form method="GET" action="{{ url_for('messages_delete', message_id=message.id) }}">
-          <button class="btn btn-sm" type="submit">Delete</button>
-        </form>
-      </li>
-    {% endif %}
-
+    <a class="btn btn-primary m-1" href="{{ url_for('messages_view', message_id=message.id) }}" role="button">More</a>
   </ul>
 
   <p class="text-justify">{{ message.text }}</p>

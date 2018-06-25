@@ -33,6 +33,25 @@ class Message(Base):
 		return Message.query.get(message_id)
 
 	@staticmethod
+	def find_by_user(user_id):
+		stmt = text(
+			"SELECT Message.date_created, Message.date_modified, Message.text "
+			"	FROM Message "
+			"LEFT JOIN Chat_user ON Chat_user.id = Message.chat_user_id "
+			"WHERE Chat_user.user_id = :user_id "
+			"ORDER BY Message.date_created "
+		).params(user_id=user_id)
+		res = db.engine.execute(stmt)
+		msg = []
+		for row in res:
+			msg.append({
+				'date_created': row[0],
+				'date_modified': row[1],
+				'text': row[2]
+			})
+		return msg
+
+	@staticmethod
 	def find_all_in_chat(chat_id, after=0):
 		stmt = text(
 			"SELECT Account.username, Message.date_created, Message.text, Message.id "

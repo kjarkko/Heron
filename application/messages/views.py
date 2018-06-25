@@ -2,6 +2,8 @@ from application import app, db
 from application.messages.models import Message
 from application.messages.forms import MessageForm
 from application.chatusers.models import ChatUser
+from application.users.models import User
+from application.chats.models import Chat
 from flask import request, redirect, render_template, url_for, abort
 from flask_login import login_required, current_user
 
@@ -10,7 +12,7 @@ from flask_login import login_required, current_user
 @login_required
 def messages_edit(message_id):
 	if not _is_sender(message_id):
-		return "not sender"
+		abort(403)
 
 	form = MessageForm()
 	msg = Message.get(message_id)
@@ -18,6 +20,19 @@ def messages_edit(message_id):
 		msg.edit(form.text.data)
 		return redirect(url_for("index"))
 	return render_template("messages/edit.html", form=form, message=msg)
+
+
+@app.route("/messages/view/<message_id>")
+@login_required
+def messages_view(message_id):
+	message = Message.get(message_id)
+	cu = ChatUser.get(message.chat_user_id)
+	chat = Chat.get(cu.chat_id)
+	user = User.find_id(cu.user_id)
+	return render_template(
+		"messages/view.html",
+		chat=chat, user=user, message=message
+	)
 
 
 @app.route("/messages/delete/<message_id>", methods=["GET", "POST"])
