@@ -2,6 +2,7 @@
 
 {% block body %}  
   <div class="container">
+    <h3>{{chat.name}}</h3>
     <form class="form-inline" method="POST" action="{{ url_for('chats_post', chat_id=chat.id) }}">
       {{ form.csrf_token }}
       <div class="form-group mx-sm-3 mb-2">
