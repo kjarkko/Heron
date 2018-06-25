@@ -107,5 +107,5 @@ venv.bak/
 .vscode
 __pycache__
 
-# databases
-.db
+# database
+database.db
